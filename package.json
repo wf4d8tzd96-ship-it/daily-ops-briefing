@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node server.js",
     "generate": "node scripts/generate-report.js",
-    "export:static": "node scripts/export-static.js"
+    "export:static": "node scripts/export-static.js",
+    "audio:static": "node scripts/generate-static-audio.js"
   },
   "engines": {
     "node": ">=18"

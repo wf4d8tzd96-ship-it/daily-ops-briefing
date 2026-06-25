@@ -33,6 +33,12 @@ jobs:
       - name: Export static site
         run: npm run export:static
 
+      - name: Install open-source TTS
+        run: sudo apt-get update && sudo apt-get install -y espeak-ng
+
+      - name: Generate static speech audio
+        run: npm run audio:static
+
       - name: Configure Pages
         uses: actions/configure-pages@v5
 

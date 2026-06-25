@@ -332,51 +332,30 @@ speakButton.addEventListener("click", () => {
     return;
   }
 
-  const cleanText = report.content
-    .replace(/^#+\s/gm, "")
-    .replace(/\[S(\d+)\]/g, "参考来源S$1")
-    .replace(/[-*]\s/g, "")
-    .slice(0, 6000);
-  if ("speechSynthesis" in window) {
-    const utterance = new SpeechSynthesisUtterance(cleanText);
-    utterance.lang = "zh-CN";
-    utterance.rate = 0.95;
-    utterance.pitch = 1.08;
-    utterance.onend = () => {
-      speakButton.textContent = "语音播报";
-    };
-    utterance.onerror = () => {
-      speakButton.textContent = "语音播报";
-      playServerSpeech(report);
-    };
-    speakButton.textContent = "停止播报";
-    speechSynthesis.speak(utterance);
-    showToast("开始语音播报");
+  if (isStaticMode) {
+    playStaticSpeech(report);
     return;
   }
 
   playServerSpeech(report);
 });
 
-async function playServerSpeech(report) {
-  if (isStaticMode) {
-    showToast("静态版将使用浏览器语音，不支持服务器音频");
+async function playAudioSource(src, fallback) {
+  if (!speechAudio) {
+    fallback();
     return;
   }
 
-  if (!speechAudio) {
-    showToast("当前环境无法播放语音");
-    return;
-  }
   speakButton.textContent = "停止播报";
-  speechAudio.src = `/api/speech/${encodeURIComponent(report.date)}?t=${Date.now()}`;
+  speechAudio.src = src;
   speechAudio.onended = () => {
     speakButton.textContent = "语音播报";
   };
   speechAudio.onerror = () => {
     speakButton.textContent = "语音播报";
-    showToast("当前系统无法生成语音音频");
+    fallback();
   };
+
   try {
     await speechAudio.play();
     showToast("开始语音播报");
@@ -384,6 +363,56 @@ async function playServerSpeech(report) {
     speakButton.textContent = "语音播报";
     showToast("浏览器阻止了自动播放，请再点一次");
   }
+}
+
+function playBrowserSpeech(report) {
+  if (!("speechSynthesis" in window)) {
+    showToast("当前浏览器不支持语音播报");
+    return;
+  }
+
+  const cleanText = report.content
+    .replace(/^#+\s/gm, "")
+    .replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g, "$1")
+    .replace(/【(\d+)】/g, "，参考文献$1，")
+    .replace(/[-*]\s/g, "")
+    .slice(0, 6000);
+  const utterance = new SpeechSynthesisUtterance(cleanText);
+  utterance.lang = "zh-CN";
+  utterance.rate = 0.95;
+  utterance.pitch = 1.08;
+  utterance.onend = () => {
+    speakButton.textContent = "语音播报";
+  };
+  utterance.onerror = () => {
+    speakButton.textContent = "语音播报";
+    showToast("播报被浏览器中断");
+  };
+  speakButton.textContent = "停止播报";
+  speechSynthesis.speak(utterance);
+  showToast("开始语音播报");
+}
+
+function playStaticSpeech(report) {
+  playAudioSource(`./audio/${encodeURIComponent(report.date)}.wav`, () => {
+    showToast("未找到预生成音频，改用浏览器语音");
+    playBrowserSpeech(report);
+  });
+}
+
+async function playServerSpeech(report) {
+  if (isStaticMode) {
+    playStaticSpeech(report);
+    return;
+  }
+
+  if (!speechAudio) {
+    showToast("当前环境无法播放语音");
+    return;
+  }
+  playAudioSource(`/api/speech/${encodeURIComponent(report.date)}?t=${Date.now()}`, () => {
+    showToast("当前系统无法生成语音音频");
+  });
 }
 
 noticeReadButton.addEventListener("click", async () => {

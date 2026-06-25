@@ -8,6 +8,7 @@
    - 适合快速公开访问、演示日报、查看历史归档。
    - 不支持在线生成、服务器语音音频、在线写入 JSON。
    - 支持搜索、切换历史、复制、导出、引用跳转、原文链接。
+   - 支持播放 GitHub Actions 预生成的系统 TTS 音频。
 
 2. Node 服务部署版
    - 适合正式使用。
@@ -26,7 +27,8 @@
 
 1. 生成当日日报
 2. 导出静态文件到 `dist`
-3. 部署到 GitHub Pages
+3. 安装开源 `espeak-ng` 并生成日报音频
+4. 部署到 GitHub Pages
 
 ### 手动本地导出
 
@@ -88,4 +90,5 @@ DAILY_REPORT_TIME=08:00
 
 - `data/reports.json` 在多数云平台的临时磁盘上可能会丢失，正式版建议换 SQLite/PostgreSQL。
 - GitHub Pages 不运行 Node 服务，也不支持服务端写文件。
-- 服务端语音当前依赖 macOS `say` 命令，云服务器上建议换成浏览器语音或第三方 TTS。
+- GitHub Pages 静态版音频由 GitHub Actions 中的开源 `espeak-ng` 预生成。
+- 服务端语音当前依赖 macOS `say` 命令，云服务器上建议换成浏览器语音、`espeak-ng` 或第三方 TTS。
