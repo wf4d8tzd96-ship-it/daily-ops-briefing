@@ -1,0 +1,5 @@
+node_modules/
+data/audio/
+dist/
+.DS_Store
+*.log

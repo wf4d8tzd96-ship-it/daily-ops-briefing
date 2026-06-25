@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>每日经营简报</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <aside class="sidebar" aria-label="历史日报">
+        <div class="brand">
+          <div class="brand-mark">AI</div>
+          <div>
+            <h1>每日经营简报</h1>
+            <p>智能运营决策版</p>
+          </div>
+        </div>
+
+        <div class="notice" id="notice" hidden>
+          <span>今日经营简报已生成，可查看</span>
+          <button id="noticeReadButton" type="button">知道了</button>
+        </div>
+
+        <form class="filters" id="filters">
+          <label>
+            <span>搜索</span>
+            <input id="queryInput" type="search" placeholder="关键词 / 标签" />
+          </label>
+          <label>
+            <span>周期</span>
+            <select id="periodSelect">
+              <option value="all">全部</option>
+              <option value="week">近7天</option>
+              <option value="month">近31天</option>
+            </select>
+          </label>
+          <button type="submit">筛选</button>
+        </form>
+
+        <div class="date-list" id="dateList" aria-live="polite"></div>
+      </aside>
+
+      <section class="detail" aria-label="日报详情">
+        <header class="detail-header">
+          <div>
+            <p class="eyebrow">经营决策输入</p>
+            <h2 id="reportTitle">加载中</h2>
+            <div class="tags" id="reportTags"></div>
+          </div>
+          <div class="actions">
+            <button id="generateButton" type="button">生成今日</button>
+            <button id="speakButton" type="button">语音播报</button>
+            <button id="copyButton" type="button">复制</button>
+            <a id="exportMarkdown" class="button" href="#" download>导出MD</a>
+            <a id="exportJson" class="button" href="#" download>导出JSON</a>
+          </div>
+        </header>
+
+        <section class="source-strip" id="sourceStrip" aria-label="参考依据"></section>
+        <article class="report" id="reportContent"></article>
+      </section>
+    </main>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <audio id="speechAudio" preload="none"></audio>
+    <script src="/app.js"></script>
+  </body>
+</html>

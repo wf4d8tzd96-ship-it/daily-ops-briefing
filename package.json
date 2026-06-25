@@ -1,0 +1,14 @@
+{
+  "name": "daily-ops-briefing",
+  "version": "0.1.0",
+  "private": true,
+  "description": "每日经营简报系统 MVP：本地 JSON 存储 + Web 浏览 + 定时生成",
+  "scripts": {
+    "start": "node server.js",
+    "generate": "node scripts/generate-report.js",
+    "export:static": "node scripts/export-static.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
