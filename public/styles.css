@@ -286,6 +286,38 @@ button:disabled {
   gap: 8px;
   flex-wrap: wrap;
   justify-content: flex-end;
+  align-items: center;
+}
+
+.rate-control {
+  min-height: 36px;
+  border: 1px solid var(--xzl-color-divider-sheet);
+  border-radius: var(--xzl-radius-card-secondary);
+  background: var(--xzl-color-background-glass);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 8px;
+  color: var(--xzl-color-text-tertiary);
+  backdrop-filter: blur(18px);
+}
+
+.rate-control span {
+  font-size: 12px;
+}
+
+.rate-control select {
+  border: 0;
+  background: transparent;
+  color: var(--xzl-color-text-secondary);
+  font: inherit;
+  font-family: var(--xzl-font-number);
+  height: 30px;
+  outline: none;
+}
+
+.rate-control:focus-within {
+  border-color: var(--xzl-color-primary-blue);
 }
 
 .source-strip {

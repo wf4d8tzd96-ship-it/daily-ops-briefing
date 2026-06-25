@@ -51,6 +51,15 @@
           <div class="actions">
             <button id="generateButton" type="button">生成今日</button>
             <button id="speakButton" type="button">语音播报</button>
+            <label class="rate-control" for="speechRateSelect">
+              <span>倍速</span>
+              <select id="speechRateSelect" aria-label="语音播报倍速">
+                <option value="1">1x</option>
+                <option value="1.5">1.5x</option>
+                <option value="1.7">1.7x</option>
+                <option value="2">2x</option>
+              </select>
+            </label>
             <button id="copyButton" type="button">复制</button>
             <a id="exportMarkdown" class="button" href="#" download>导出MD</a>
             <a id="exportJson" class="button" href="#" download>导出JSON</a>

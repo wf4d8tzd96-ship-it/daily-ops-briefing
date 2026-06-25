@@ -13,6 +13,7 @@ const queryInput = document.querySelector("#queryInput");
 const periodSelect = document.querySelector("#periodSelect");
 const generateButton = document.querySelector("#generateButton");
 const speakButton = document.querySelector("#speakButton");
+const speechRateSelect = document.querySelector("#speechRateSelect");
 const copyButton = document.querySelector("#copyButton");
 const exportMarkdown = document.querySelector("#exportMarkdown");
 const exportJson = document.querySelector("#exportJson");
@@ -23,6 +24,34 @@ const toast = document.querySelector("#toast");
 const speechAudio = document.querySelector("#speechAudio");
 const isStaticMode = window.APP_MODE === "static";
 const downloadUrls = [];
+const speechRates = [1, 1.5, 1.7, 2];
+const speechRateStorageKey = "dailyOpsBriefingSpeechRate";
+
+function getSavedSpeechRate() {
+  const saved = Number(localStorage.getItem(speechRateStorageKey));
+  return speechRates.includes(saved) ? saved : 1;
+}
+
+function getSpeechRate() {
+  const selected = Number(speechRateSelect?.value);
+  return speechRates.includes(selected) ? selected : getSavedSpeechRate();
+}
+
+function applySpeechRate() {
+  const rate = getSpeechRate();
+  if (speechAudio) speechAudio.playbackRate = rate;
+  return rate;
+}
+
+if (speechRateSelect) {
+  speechRateSelect.value = String(getSavedSpeechRate());
+  speechRateSelect.addEventListener("change", () => {
+    const rate = getSpeechRate();
+    localStorage.setItem(speechRateStorageKey, String(rate));
+    applySpeechRate();
+    showToast(`播报速度已设为 ${rate}x`);
+  });
+}
 
 function getTodayString() {
   return new Intl.DateTimeFormat("en-CA", {
@@ -348,6 +377,7 @@ async function playAudioSource(src, fallback) {
 
   speakButton.textContent = "停止播报";
   speechAudio.src = src;
+  applySpeechRate();
   speechAudio.onended = () => {
     speakButton.textContent = "语音播报";
   };
@@ -380,7 +410,7 @@ function playBrowserSpeech(report) {
     .slice(0, 6000);
   const utterance = new SpeechSynthesisUtterance(cleanText);
   utterance.lang = "zh-CN";
-  utterance.rate = 0.95;
+  utterance.rate = getSpeechRate();
   utterance.pitch = 1.08;
   utterance.onend = () => {
     speakButton.textContent = "语音播报";
