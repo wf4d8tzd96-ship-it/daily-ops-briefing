@@ -27,7 +27,7 @@
 
 1. 生成当日日报
 2. 导出静态文件到 `dist`
-3. 安装开源 `espeak-ng` 并生成日报音频
+3. 安装开源 `edge-tts` 客户端并生成更自然的中文 MP3 音频，失败时降级到 `espeak-ng`
 4. 部署到 GitHub Pages
 
 ### 手动本地导出
@@ -90,5 +90,5 @@ DAILY_REPORT_TIME=08:00
 
 - `data/reports.json` 在多数云平台的临时磁盘上可能会丢失，正式版建议换 SQLite/PostgreSQL。
 - GitHub Pages 不运行 Node 服务，也不支持服务端写文件。
-- GitHub Pages 静态版音频由 GitHub Actions 中的开源 `espeak-ng` 预生成。
+- GitHub Pages 静态版音频由 GitHub Actions 中的开源 `edge-tts` 客户端预生成，失败时降级到 `espeak-ng`。
 - 服务端语音当前依赖 macOS `say` 命令，云服务器上建议换成浏览器语音、`espeak-ng` 或第三方 TTS。

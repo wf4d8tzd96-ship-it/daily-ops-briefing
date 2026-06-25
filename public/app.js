@@ -372,9 +372,10 @@ function playBrowserSpeech(report) {
   }
 
   const cleanText = report.content
+    .split(/\n##\s+五、参考文献/)[0]
     .replace(/^#+\s/gm, "")
     .replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g, "$1")
-    .replace(/【(\d+)】/g, "，参考文献$1，")
+    .replace(/【(\d+)】/g, "")
     .replace(/[-*]\s/g, "")
     .slice(0, 6000);
   const utterance = new SpeechSynthesisUtterance(cleanText);
@@ -394,9 +395,11 @@ function playBrowserSpeech(report) {
 }
 
 function playStaticSpeech(report) {
-  playAudioSource(`./audio/${encodeURIComponent(report.date)}.wav`, () => {
-    showToast("未找到预生成音频，改用浏览器语音");
-    playBrowserSpeech(report);
+  playAudioSource(`./audio/${encodeURIComponent(report.date)}.mp3`, () => {
+    playAudioSource(`./audio/${encodeURIComponent(report.date)}.wav`, () => {
+      showToast("未找到预生成音频，改用浏览器语音");
+      playBrowserSpeech(report);
+    });
   });
 }
 
